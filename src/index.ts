@@ -6,6 +6,7 @@ import { DeviceCodeInfo } from '@azure/identity';
 import { User } from '@microsoft/microsoft-graph-types';
 import appConfig from './appConfig';
 import { getGraphClientForUser } from './graphHelper';
+import runBatchSamples from './snippets/batchRequests';
 
 async function main() {
   const userClient = getGraphClientForUser(
@@ -24,7 +25,7 @@ async function main() {
 
   let choice = 0;
 
-  const choices = ['Do something'];
+  const choices = ['Run batch samples'];
 
   while (choice != -1) {
     choice = readline.keyInSelect(choices, 'Select an option', {
@@ -37,7 +38,7 @@ async function main() {
         console.log('Goodbye...');
         break;
       case 0:
-        console.log('OK');
+        await runBatchSamples(userClient);
         break;
       default:
         console.log('Invalid choice! Please try again.');

@@ -19,6 +19,7 @@
     "@types/config": "^3.3.0",
     "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^20.2.5",
+    "@types/node-fetch": "^2.6.4",
     "@types/readline-sync": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
@@ -33,6 +34,7 @@
     "@azure/identity": "^3.2.2",
     "@microsoft/microsoft-graph-client": "^3.0.5",
     "config": "^3.3.9",
+    "date-fns": "^2.30.0",
     "isomorphic-fetch": "^3.0.0",
     "readline-sync": "^1.4.10"
   }
