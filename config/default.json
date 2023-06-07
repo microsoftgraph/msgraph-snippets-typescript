@@ -1,0 +1,12 @@
+{
+  "clientId": "YOUR_CLIENT_ID",
+  "tenantId": "common",
+  "graphUserScopes": [
+    "User.Read",
+    "Calendars.ReadWrite",
+    "Mail.ReadWrite",
+    "Group.Read.All",
+    "TeamSettings.ReadWrite.All",
+    "Files.ReadWrite"
+  ]
+}
