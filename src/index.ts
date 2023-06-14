@@ -8,6 +8,7 @@ import appConfig from './appConfig';
 import { getGraphClientForUser } from './graphHelper';
 import runBatchSamples from './snippets/batchRequests';
 import runRequestSamples from './snippets/createRequests';
+import runLargeFileUploadSamples from './snippets/largeFileUpload';
 
 async function main() {
   const userClient = getGraphClientForUser(
@@ -26,7 +27,11 @@ async function main() {
 
   let choice = 0;
 
-  const choices = ['Run batch samples', 'Run create request samples'];
+  const choices = [
+    'Run batch samples',
+    'Run create request samples',
+    'Run large file upload samples',
+  ];
 
   while (choice != -1) {
     choice = readline.keyInSelect(choices, 'Select an option', {
@@ -43,6 +48,9 @@ async function main() {
         break;
       case 1:
         await runRequestSamples(userClient);
+        break;
+      case 2:
+        await runLargeFileUploadSamples(userClient);
         break;
       default:
         console.log('Invalid choice! Please try again.');
