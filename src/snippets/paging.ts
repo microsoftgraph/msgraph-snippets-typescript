@@ -18,6 +18,7 @@ export default async function runPagingSamples(
 }
 
 async function iterateAllMessages(graphClient: Client): Promise<void> {
+  // <PagingSnippet>
   const response: PageCollection = await graphClient
     .api('/me/messages?$top=10&$select=sender,subject,body')
     .header('Prefer', 'outlook.body-content-type="text"')
@@ -51,6 +52,7 @@ async function iterateAllMessages(graphClient: Client): Promise<void> {
 
   // This iterates the collection until the nextLink is drained out.
   await pageIterator.iterate();
+  // </PagingSnippet>
 }
 
 async function iterateAllMessagesWithPause(graphClient: Client): Promise<void> {
