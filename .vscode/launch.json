@@ -14,7 +14,7 @@
             ],
             "program": "${workspaceFolder}/out/index.js",
             "outFiles": [
-                "${workspaceFolder}/**/*.js"
+                "${workspaceFolder}/out/**/*.js"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

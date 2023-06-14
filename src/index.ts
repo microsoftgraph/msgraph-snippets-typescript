@@ -7,6 +7,7 @@ import { User } from '@microsoft/microsoft-graph-types';
 import appConfig from './appConfig';
 import { getGraphClientForUser } from './graphHelper';
 import runBatchSamples from './snippets/batchRequests';
+import runRequestSamples from './snippets/createRequests';
 
 async function main() {
   const userClient = getGraphClientForUser(
@@ -25,7 +26,7 @@ async function main() {
 
   let choice = 0;
 
-  const choices = ['Run batch samples'];
+  const choices = ['Run batch samples', 'Run create request samples'];
 
   while (choice != -1) {
     choice = readline.keyInSelect(choices, 'Select an option', {
@@ -39,6 +40,9 @@ async function main() {
         break;
       case 0:
         await runBatchSamples(userClient);
+        break;
+      case 1:
+        await runRequestSamples(userClient);
         break;
       default:
         console.log('Invalid choice! Please try again.');
