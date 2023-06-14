@@ -9,6 +9,7 @@ import { getGraphClientForUser } from './graphHelper';
 import runBatchSamples from './snippets/batchRequests';
 import runRequestSamples from './snippets/createRequests';
 import runLargeFileUploadSamples from './snippets/largeFileUpload';
+import runPagingSamples from './snippets/paging';
 
 async function main() {
   const userClient = getGraphClientForUser(
@@ -31,6 +32,7 @@ async function main() {
     'Run batch samples',
     'Run create request samples',
     'Run large file upload samples',
+    'Run paging samples',
   ];
 
   while (choice != -1) {
@@ -51,6 +53,9 @@ async function main() {
         break;
       case 2:
         await runLargeFileUploadSamples(userClient);
+        break;
+      case 3:
+        await runPagingSamples(userClient);
         break;
       default:
         console.log('Invalid choice! Please try again.');
