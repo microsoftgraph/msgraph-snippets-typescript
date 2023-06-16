@@ -70,11 +70,11 @@ async function makeSelectRequest(graphClient: Client): Promise<User> {
 async function makeListRequest(graphClient: Client): Promise<Message[]> {
   // <ListRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/messages?
-  // $select=subject,sender&$filter=subject eq 'Hello world'&$orderBy=receivedDateTime
+  // $select=subject,sender&$filter=subject eq 'Hello world'
   const messages = await graphClient
     .api('/me/messages')
     .select(['subject', 'sender'])
-    .orderby('receivedDateTime')
+    .filter(`subject eq 'Hello world'`)
     .get();
   // </ListRequestSnippet>
 
