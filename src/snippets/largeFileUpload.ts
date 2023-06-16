@@ -15,10 +15,9 @@ import { readFile } from 'fs/promises';
 import { basename } from 'path';
 
 export default async function runLargeFileUploadSamples(
-  graphClient: Client
+  graphClient: Client,
+  filePath: string
 ): Promise<void> {
-  const filePath =
-    'C:/Users/jasonjoh/OneDrive - Microsoft/Pictures/vacation.gif';
   const targetFolderPath = 'Documents';
 
   await uploadFileToOneDrive(graphClient, filePath, targetFolderPath);

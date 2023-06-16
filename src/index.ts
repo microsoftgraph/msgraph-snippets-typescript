@@ -52,7 +52,7 @@ async function main() {
         await runRequestSamples(userClient);
         break;
       case 2:
-        await runLargeFileUploadSamples(userClient);
+        await runLargeFileUploadSamples(userClient, appConfig.largeFilePath);
         break;
       case 3:
         await runPagingSamples(userClient);

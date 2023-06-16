@@ -8,5 +8,6 @@
     "Group.Read.All",
     "TeamSettings.ReadWrite.All",
     "Files.ReadWrite"
-  ]
+  ],
+  "largeFilePath": "some-large-file"
 }
