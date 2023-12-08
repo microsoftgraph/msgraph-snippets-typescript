@@ -11,7 +11,7 @@ import {
 } from '@microsoft/microsoft-graph-types';
 
 export default async function runRequestSamples(
-  graphClient: Client
+  graphClient: Client,
 ): Promise<void> {
   // Create a new message
   const tempMessage: Message = await graphClient.api('/me/messages').post({
@@ -83,7 +83,7 @@ async function makeListRequest(graphClient: Client): Promise<Message[]> {
 
 async function makeItemByIdRequest(
   graphClient: Client,
-  messageId: string
+  messageId: string,
 ): Promise<Message> {
   // <ItemByIdRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/messages/{message-id}
@@ -96,7 +96,7 @@ async function makeItemByIdRequest(
 
 async function makeExpandRequest(
   graphClient: Client,
-  messageId: string
+  messageId: string,
 ): Promise<Message> {
   // <ExpandRequestSnippet>
   // <ExpandRequestSnippet>
@@ -113,7 +113,7 @@ async function makeExpandRequest(
 
 async function makeDeleteRequest(
   graphClient: Client,
-  messageId: string
+  messageId: string,
 ): Promise<void> {
   // <DeleteRequestSnippet>
   // DELETE https://graph.microsoft.com/v1.0/me/messages/{message-id}
@@ -137,7 +137,7 @@ async function makeCreateRequest(graphClient: Client): Promise<Calendar> {
 
 async function makeUpdateRequest(
   graphClient: Client,
-  teamId: string
+  teamId: string,
 ): Promise<void> {
   // <UpdateRequestSnippet>
   // PATCH https://graph.microsoft.com/v1.0/teams/{team-id}
@@ -166,7 +166,7 @@ async function makeHeadersRequest(graphClient: Client): Promise<Event[]> {
 }
 
 async function makeQueryParametersRequest(
-  graphClient: Client
+  graphClient: Client,
 ): Promise<Event[]> {
   // <QueryParametersRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/calendarView?

@@ -6,9 +6,9 @@ import {
   BatchRequestStep,
   BatchRequestContent,
   BatchResponseContent,
+  PageCollection,
 } from '@microsoft/microsoft-graph-client';
 import { User, Event } from '@microsoft/microsoft-graph-types';
-import { Request } from 'node-fetch';
 import {
   startOfToday,
   endOfToday,
@@ -45,7 +45,7 @@ async function simpleBatch(graphClient: Client) {
       `/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
       {
         method: 'GET',
-      }
+      },
     ),
   };
 
@@ -71,7 +71,7 @@ async function simpleBatch(graphClient: Client) {
   // into the expected type
   // Types supplied by @microsoft/microsoft-graph-types
   if (userResponse.ok) {
-    const user: User = await userResponse.json();
+    const user: User = (await userResponse.json()) as User;
     console.log(`Hello ${user.displayName}!`);
   } else {
     console.log(`Get user failed with status ${userResponse.status}`);
@@ -84,12 +84,12 @@ async function simpleBatch(graphClient: Client) {
   // the JSON payload can be deserialized into an array of
   // the expected type
   if (calendarResponse.ok) {
-    const rawResponse = await calendarResponse.json();
+    const rawResponse = (await calendarResponse.json()) as PageCollection;
     const events: Event[] = rawResponse.value;
     console.log(`You have ${events.length} events on your calendar today.`);
   } else {
     console.log(
-      `Get calendar view failed with status ${calendarResponse.status}`
+      `Get calendar view failed with status ${calendarResponse.status}`,
     );
   }
   // </SimpleBatchSnippet>
@@ -141,7 +141,7 @@ async function dependentBatch(graphClient: Client) {
       `/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
       {
         method: 'GET',
-      }
+      },
     ),
   };
 
@@ -163,7 +163,7 @@ async function dependentBatch(graphClient: Client) {
   // Get the create event response by id
   const newEventResponse = batchResponseContent.getResponseById('1');
   if (newEventResponse.ok) {
-    const event: Event = await newEventResponse.json();
+    const event: Event = (await newEventResponse.json()) as Event;
     console.log(`New event created with ID: ${event.id}`);
   } else {
     console.log(`Create event failed with status ${newEventResponse.status}`);
@@ -176,12 +176,12 @@ async function dependentBatch(graphClient: Client) {
     // For a collection of entities, the "value" property of
     // the JSON payload can be deserialized into an array of
     // the expected type
-    const rawResponse = await calendarResponse.json();
+    const rawResponse = (await calendarResponse.json()) as PageCollection;
     const events: Event[] = rawResponse.value;
     console.log(`You have ${events.length} events on your calendar today.`);
   } else {
     console.log(
-      `Get calendar view failed with status ${calendarResponse.status}`
+      `Get calendar view failed with status ${calendarResponse.status}`,
     );
   }
   // </DependentBatchSnippet>

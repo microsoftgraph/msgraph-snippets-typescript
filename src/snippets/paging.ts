@@ -11,10 +11,11 @@ import {
 import { Message } from '@microsoft/microsoft-graph-types';
 
 export default async function runPagingSamples(
-  graphClient: Client
+  graphClient: Client,
 ): Promise<void> {
   await iterateAllMessages(graphClient);
   await iterateAllMessagesWithPause(graphClient);
+  await manuallyPageAllMessages(graphClient);
 }
 
 async function iterateAllMessages(graphClient: Client): Promise<void> {
@@ -47,7 +48,7 @@ async function iterateAllMessages(graphClient: Client): Promise<void> {
     graphClient,
     response,
     callback,
-    requestOptions
+    requestOptions,
   );
 
   // This iterates the collection until the nextLink is drained out.
@@ -85,4 +86,24 @@ async function iterateAllMessagesWithPause(graphClient: Client): Promise<void> {
     await pageIterator.resume();
   }
   // </ResumePagingSnippet>
+}
+
+async function manuallyPageAllMessages(graphClient: Client): Promise<void> {
+  // <ManualPagingSnippet>
+  let response: PageCollection = await graphClient
+    .api('/me/messages?$top=10')
+    .get();
+
+  while (response.value.length > 0) {
+    for (const message of response.value as Message[]) {
+      console.log(message.subject);
+    }
+
+    if (response['@odata.nextLink']) {
+      response = await graphClient.api(response['@odata.nextLink']).get();
+    } else {
+      break;
+    }
+  }
+  // </ManualPagingSnippet>
 }

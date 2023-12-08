@@ -16,7 +16,7 @@ async function main() {
     appConfig,
     (info: DeviceCodeInfo) => {
       console.log(info.message);
-    }
+    },
   );
 
   try {

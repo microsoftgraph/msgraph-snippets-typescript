@@ -16,7 +16,7 @@ import { basename } from 'path';
 
 export default async function runLargeFileUploadSamples(
   graphClient: Client,
-  filePath: string
+  filePath: string,
 ): Promise<void> {
   const targetFolderPath = 'Documents';
 
@@ -27,7 +27,7 @@ export default async function runLargeFileUploadSamples(
 async function uploadFileToOneDrive(
   graphClient: Client,
   filePath: string,
-  targetFolderPath: string
+  targetFolderPath: string,
 ): Promise<void> {
   // <LargeFileUploadSnippet>
   // readFile from fs/promises
@@ -54,7 +54,7 @@ async function uploadFileToOneDrive(
   const uploadTask = await OneDriveLargeFileUploadTask.createTaskWithFileObject(
     graphClient,
     fileUpload,
-    options
+    options,
   );
 
   // Do the upload
@@ -69,7 +69,7 @@ async function uploadFileToOneDrive(
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function resumeUpload(
-  uploadTask: OneDriveLargeFileUploadTask<Blob>
+  uploadTask: OneDriveLargeFileUploadTask<Blob>,
 ): Promise<DriveItem> {
   // <ResumeSnippet>
   const resumedFile = (await uploadTask.resume()) as DriveItem;
@@ -80,7 +80,7 @@ async function resumeUpload(
 
 async function uploadAttachmentToMessage(
   graphClient: Client,
-  filePath: string
+  filePath: string,
 ): Promise<void> {
   // <UploadAttachmentSnippet>
   // readFile from fs/promises
@@ -114,7 +114,7 @@ async function uploadAttachmentToMessage(
         name: fileName,
         size: file.byteLength,
       },
-    }
+    },
   );
 
   // Create file upload
@@ -125,7 +125,7 @@ async function uploadAttachmentToMessage(
     graphClient,
     fileUpload,
     uploadSession,
-    options
+    options,
   );
 
   // Upload the file

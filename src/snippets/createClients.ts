@@ -60,7 +60,7 @@ export function createWithAuthorizationCode(): Client {
     'YOUR_CLIENT_ID',
     'YOUR_CLIENT_SECRET',
     'AUTHORIZATION_CODE',
-    'REDIRECT_URL'
+    'REDIRECT_URL',
   );
 
   // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
@@ -80,7 +80,7 @@ export function createWithClientSecret(): Client {
   const credential = new ClientSecretCredential(
     'YOUR_TENANT_ID',
     'YOUR_CLIENT_ID',
-    'YOUR_CLIENT_SECRET'
+    'YOUR_CLIENT_SECRET',
   );
 
   // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
@@ -104,7 +104,7 @@ export function createWithClientCertificate(): Client {
   const credential = new ClientCertificateCredential(
     'YOUR_TENANT_ID',
     'YOUR_CLIENT_ID',
-    'YOUR_CERTIFICATE_PATH'
+    'YOUR_CERTIFICATE_PATH',
   );
 
   // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
@@ -192,7 +192,7 @@ export function createWithUserNamePassword(): Client {
     'YOUR_TENANT_ID',
     'YOUR_CLIENT_ID',
     'YOUR_USER_NAME',
-    'YOUR_PASSWORD'
+    'YOUR_PASSWORD',
   );
 
   // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials

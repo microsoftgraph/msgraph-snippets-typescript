@@ -15,7 +15,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export function createWithChaosHandler(
   credential: TokenCredential,
-  scopes: string[]
+  scopes: string[],
 ): Client {
   // <ChaosHandlerSnippet>
   // credential is one of the credential classes from @azure/identity
@@ -49,7 +49,7 @@ export function createWithChaosHandler(
 
 export function createWithProxy(
   credential: TokenCredential,
-  scopes: string[]
+  scopes: string[],
 ): Client {
   // <ProxySnippet>
   // credential is one of the credential classes from @azure/identity
