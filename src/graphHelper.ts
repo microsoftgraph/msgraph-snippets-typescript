@@ -14,7 +14,7 @@ import { AppConfig } from './appConfig';
 
 export function getGraphClientForUser(
   appConfig: AppConfig,
-  deviceCodePrompt: DeviceCodePromptCallback
+  deviceCodePrompt: DeviceCodePromptCallback,
 ): Client {
   const credential = new DeviceCodeCredential({
     clientId: appConfig.clientId,

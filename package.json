@@ -10,6 +10,7 @@
     "start": "ts-node ./src/index.ts",
     "build": "tsc",
     "lint": "eslint . --ext ts",
+    "format": "prettier --write **/**.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Microsoft Corporation",
@@ -19,7 +20,6 @@
     "@types/config": "^3.3.3",
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/node": "^20.10.4",
-    "@types/node-fetch": "^2.6.9",
     "@types/readline-sync": "^1.4.8",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
