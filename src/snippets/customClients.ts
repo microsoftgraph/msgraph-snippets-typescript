@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { TokenCredential } from '@azure/identity';
+import { ClientSecretCredential, TokenCredential } from '@azure/identity';
 import {
   Client,
   AuthenticationHandler,
@@ -47,12 +47,21 @@ export function createWithChaosHandler(
   return graphClient;
 }
 
-export function createWithProxy(
-  credential: TokenCredential,
-  scopes: string[],
-): Client {
+export function createWithProxy(scopes: string[]): Client {
   // <ProxySnippet>
-  // credential is one of the credential classes from @azure/identity
+  // Setup proxy for the token credential from @azure/identity
+  const credential = new ClientSecretCredential(
+    'YOUR_TENANT_ID',
+    'YOUR_CLIENT_ID',
+    'YOUR_CLIENT_SECRET',
+    {
+      proxyOptions: {
+        host: 'localhost',
+        port: 8888,
+      },
+    },
+  );
+
   // scopes is an array of permission scope strings
   const authProvider = new TokenCredentialAuthenticationProvider(credential, {
     scopes: scopes,
