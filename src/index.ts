@@ -5,14 +5,14 @@ import * as readline from 'readline-sync';
 import { DeviceCodeInfo } from '@azure/identity';
 import { User } from '@microsoft/microsoft-graph-types';
 import appConfig from './appConfig';
-import { getGraphClientForUser } from './graphHelper';
+import { getDebugGraphClientForUser } from './graphHelper';
 import runBatchSamples from './snippets/batchRequests';
 import runRequestSamples from './snippets/createRequests';
 import runLargeFileUploadSamples from './snippets/largeFileUpload';
 import runPagingSamples from './snippets/paging';
 
 async function main() {
-  const userClient = getGraphClientForUser(
+  const userClient = getDebugGraphClientForUser(
     appConfig,
     (info: DeviceCodeInfo) => {
       console.log(info.message);

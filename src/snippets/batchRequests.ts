@@ -28,7 +28,7 @@ async function simpleBatch(graphClient: Client) {
   // Request is from fetch polyfill, i.e. node-fetch
   const userRequestStep: BatchRequestStep = {
     id: '1',
-    request: new Request('/me', {
+    request: new Request('https://graph.microsoft.com/me', {
       method: 'GET',
     }),
   };
@@ -42,7 +42,7 @@ async function simpleBatch(graphClient: Client) {
   const calendarViewRequestStep: BatchRequestStep = {
     id: '2',
     request: new Request(
-      `/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
+      `https://graph.microsoft.com/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
       {
         method: 'GET',
       },
@@ -119,7 +119,7 @@ async function dependentBatch(graphClient: Client) {
   // Request is from fetch polyfill, i.e. node-fetch
   const addEventRequestStep: BatchRequestStep = {
     id: '1',
-    request: new Request('/me/events', {
+    request: new Request('https://graph.microsoft.com/me/events', {
       method: 'POST',
       body: JSON.stringify(newEvent),
       headers: {
@@ -138,7 +138,7 @@ async function dependentBatch(graphClient: Client) {
     // This step will happen after step 1
     dependsOn: ['1'],
     request: new Request(
-      `/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
+      `https://graph.microsoft.com/me/calendarView?startDateTime=${start}&endDateTime=${end}`,
       {
         method: 'GET',
       },
