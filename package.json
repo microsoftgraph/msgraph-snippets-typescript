@@ -33,7 +33,7 @@
   "dependencies": {
     "@azure/identity": "^4.3.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
-    "config": "^3.3.11",
+    "config": "^3.3.12",
     "date-fns": "^3.6.0",
     "https-proxy-agent": "^7.0.4",
     "isomorphic-fetch": "^3.0.0",
