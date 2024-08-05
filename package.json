@@ -31,7 +31,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@azure/identity": "^4.4.0",
+    "@azure/identity": "^4.4.1",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "config": "^3.3.12",
     "date-fns": "^3.6.0",
