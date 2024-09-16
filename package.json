@@ -35,7 +35,7 @@
     "@azure/identity": "^4.4.1",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "config": "^3.3.12",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.0.0",
     "https-proxy-agent": "^7.0.5",
     "isomorphic-fetch": "^3.0.0",
     "readline-sync": "^1.4.10"
