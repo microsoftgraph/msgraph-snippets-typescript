@@ -67,7 +67,7 @@ async function uploadFileToOneDrive(
   // </LargeFileUploadSnippet>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
 async function resumeUpload(
   uploadTask: OneDriveLargeFileUploadTask<Blob>,
 ): Promise<DriveItem> {

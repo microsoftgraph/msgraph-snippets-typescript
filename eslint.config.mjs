@@ -16,7 +16,7 @@ export default [
   js.configs.recommended,
   eslintPrettierRecommended,
   {
-    files: ['**.{ts,mjs}'],
+    files: ['**/**.{ts,mjs}'],
 
     languageOptions: {
       globals: {
@@ -34,6 +34,17 @@ export default [
     },
 
     rules: {
+      'no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       'header/header': [
         'error',
         'line',
