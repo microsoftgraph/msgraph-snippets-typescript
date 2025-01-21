@@ -1,142 +1,157 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Client } from '@microsoft/microsoft-graph-client';
+import { GraphServiceClient } from '@microsoft/msgraph-sdk';
 import {
-  User,
-  Message,
   Calendar,
-  Team,
   Event,
-} from '@microsoft/microsoft-graph-types';
+  Message,
+  Team,
+  User,
+} from '@microsoft/msgraph-sdk/models';
 
 export default async function runRequestSamples(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
 ): Promise<void> {
-  // Create a new message
-  const tempMessage: Message = await graphClient.api('/me/messages').post({
-    subject: 'Temporary',
-  });
+  try {
+    // Create a new message
+    const tempMessage = await graphClient.me.messages.post({
+      subject: 'Temporary',
+    });
 
-  const messageId = tempMessage.id;
-  if (!messageId) {
-    throw new Error('Could not create a new message');
+    const messageId = tempMessage?.id;
+    if (!messageId) {
+      throw new Error('Could not create a new message');
+    }
+
+    // Get a team to update
+    const teams = await graphClient.groups.get({
+      queryParameters: {
+        filter: "resourceProvisioningOptions/Any(x:x eq 'Team')",
+      },
+    });
+
+    const teamId = teams?.value?.at(0)?.id;
+    if (!teamId) {
+      throw new Error('Could not get a team');
+    }
+
+    await makeReadRequest(graphClient);
+    await makeSelectRequest(graphClient);
+    await makeListRequest(graphClient);
+    await makeItemByIdRequest(graphClient, messageId);
+    await makeExpandRequest(graphClient, messageId);
+    await makeDeleteRequest(graphClient, messageId);
+    await makeCreateRequest(graphClient);
+    await makeUpdateRequest(graphClient, teamId);
+    await makeHeadersRequest(graphClient);
+    await makeQueryParametersRequest(graphClient);
+  } catch (err) {
+    console.log(JSON.stringify(err, null, 2));
   }
-
-  // Get a team to update
-  const teams = await graphClient
-    .api('/groups')
-    .filter("resourceProvisioningOptions/Any(x:x eq 'Team')")
-    .get();
-
-  const teamId = teams.value[0]?.id;
-  if (!teamId) {
-    throw new Error('Could not get a team');
-  }
-
-  await makeReadRequest(graphClient);
-  await makeSelectRequest(graphClient);
-  await makeListRequest(graphClient);
-  await makeItemByIdRequest(graphClient, messageId);
-  await makeExpandRequest(graphClient, messageId);
-  await makeDeleteRequest(graphClient, messageId);
-  await makeCreateRequest(graphClient);
-  await makeUpdateRequest(graphClient, teamId);
-  await makeHeadersRequest(graphClient);
-  await makeQueryParametersRequest(graphClient);
 }
 
-async function makeReadRequest(graphClient: Client): Promise<User> {
+async function makeReadRequest(
+  graphClient: GraphServiceClient,
+): Promise<User | undefined> {
   // <ReadRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me
-  const user = await graphClient.api('/me').get();
+  const user = await graphClient.me.get();
   // </ReadRequestSnippet>
 
   return user;
 }
 
-async function makeSelectRequest(graphClient: Client): Promise<User> {
+async function makeSelectRequest(
+  graphClient: GraphServiceClient,
+): Promise<User | undefined> {
   // <SelectRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me?$select=displayName,jobTitle
-  const user = await graphClient
-    .api('/me')
-    .select(['displayName', 'jobTitle'])
-    .get();
+  const user = await graphClient.me.get({
+    queryParameters: {
+      select: ['displayName', 'jobTitle'],
+    },
+  });
   // </SelectRequestSnippet>
 
   return user;
 }
 
-async function makeListRequest(graphClient: Client): Promise<Message[]> {
+async function makeListRequest(
+  graphClient: GraphServiceClient,
+): Promise<Message[]> {
   // <ListRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/messages?
   // $select=subject,sender&$filter=subject eq 'Hello world'
-  const messages = await graphClient
-    .api('/me/messages')
-    .select(['subject', 'sender'])
-    .filter(`subject eq 'Hello world'`)
-    .get();
+  const messages = await graphClient.me.messages.get({
+    queryParameters: {
+      select: ['subject', 'sender'],
+      filter: `subject eq 'Hello world'`,
+    },
+  });
   // </ListRequestSnippet>
 
-  return messages.value;
+  return messages?.value ?? [];
 }
 
 async function makeItemByIdRequest(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   messageId: string,
-): Promise<Message> {
+): Promise<Message | undefined> {
   // <ItemByIdRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/messages/{message-id}
   // messageId is a string containing the id property of the message
-  const message = await graphClient.api(`/me/messages/${messageId}`).get();
+  const message = await graphClient.me.messages.byMessageId(messageId).get();
   // </ItemByIdRequestSnippet>
 
   return message;
 }
 
 async function makeExpandRequest(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   messageId: string,
-): Promise<Message> {
-  // <ExpandRequestSnippet>
+): Promise<Message | undefined> {
   // <ExpandRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/messages/{message-id}?$expand=attachments
   // messageId is a string containing the id property of the message
-  const message = await graphClient
-    .api(`/me/messages/${messageId}`)
-    .expand('attachments')
-    .get();
+  const message = await graphClient.me.messages.byMessageId(messageId).get({
+    queryParameters: {
+      expand: ['attachments'],
+    },
+  });
   // </ExpandRequestSnippet>
 
   return message;
 }
 
 async function makeDeleteRequest(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   messageId: string,
 ): Promise<void> {
   // <DeleteRequestSnippet>
   // DELETE https://graph.microsoft.com/v1.0/me/messages/{message-id}
   // messageId is a string containing the id property of the message
-  await graphClient.api(`/me/messages/${messageId}`).delete();
+  await graphClient.me.messages.byMessageId(messageId).delete();
   // </DeleteRequestSnippet>
 }
 
-async function makeCreateRequest(graphClient: Client): Promise<Calendar> {
+async function makeCreateRequest(
+  graphClient: GraphServiceClient,
+): Promise<Calendar | undefined> {
   // <CreateRequestSnippet>
   // POST https://graph.microsoft.com/v1.0/me/calendars
   const calendar: Calendar = {
     name: 'Volunteer',
   };
 
-  const newCalendar = await graphClient.api('/me/calendars').post(calendar);
+  const newCalendar = await graphClient.me.calendars.post(calendar);
   // </CreateRequestSnippet>
 
   return newCalendar;
 }
 
 async function makeUpdateRequest(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   teamId: string,
 ): Promise<void> {
   // <UpdateRequestSnippet>
@@ -149,36 +164,38 @@ async function makeUpdateRequest(
   };
 
   // teamId is a string containing the id property of the team
-  await graphClient.api(`/teams/${teamId}`).update(team);
+  await graphClient.teams.byTeamId(teamId).patch(team);
   // </UpdateRequestSnippet>
 }
 
-async function makeHeadersRequest(graphClient: Client): Promise<Event[]> {
+async function makeHeadersRequest(
+  graphClient: GraphServiceClient,
+): Promise<Event[]> {
   // <HeadersRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/events
-  const events = await graphClient
-    .api('/me/events')
-    .header('Prefer', 'outlook.timezone="Pacific Standard Time"')
-    .get();
+  const events = await graphClient.me.events.get({
+    headers: {
+      Prefer: 'outlook.timezone="Pacific Standard Time"',
+    },
+  });
   // </HeadersRequestSnippet>
 
-  return events;
+  return events?.value ?? [];
 }
 
 async function makeQueryParametersRequest(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
 ): Promise<Event[]> {
   // <QueryParametersRequestSnippet>
   // GET https://graph.microsoft.com/v1.0/me/calendarView?
   // startDateTime=2023-06-14T00:00:00Z&endDateTime=2023-06-15T00:00:00Z
-  const events = await graphClient
-    .api('me/calendar/calendarView')
-    .query({
+  const events = await graphClient.me.calendar.calendarView.get({
+    queryParameters: {
       startDateTime: '2023-06-14T00:00:00Z',
       endDateTime: '2023-06-15T00:00:00Z',
-    })
-    .get();
+    },
+  });
   // </QueryParametersRequestSnippet>
 
-  return events;
+  return events?.value ?? [];
 }

@@ -3,16 +3,15 @@
 
 import * as readline from 'readline-sync';
 import { DeviceCodeInfo } from '@azure/identity';
-import { User } from '@microsoft/microsoft-graph-types';
-import appConfig from './appConfig';
-import { getDebugGraphClientForUser } from './graphHelper';
-import runBatchSamples from './snippets/batchRequests';
-import runRequestSamples from './snippets/createRequests';
-import runLargeFileUploadSamples from './snippets/largeFileUpload';
-import runPagingSamples from './snippets/paging';
+import appConfig from './appConfig.js';
+import { getGraphClientForUser } from './graphHelper.js';
+//import runBatchSamples from './snippets/batchRequests.js';
+import runRequestSamples from './snippets/createRequests.js';
+//import runLargeFileUploadSamples from './snippets/largeFileUpload.js';
+//import runPagingSamples from './snippets/paging.js';
 
 async function main() {
-  const userClient = getDebugGraphClientForUser(
+  const userClient = getGraphClientForUser(
     appConfig,
     (info: DeviceCodeInfo) => {
       console.log(info.message);
@@ -20,10 +19,10 @@ async function main() {
   );
 
   try {
-    const me = (await userClient.api('/me').get()) as User;
-    console.log(`Hello, ${me.displayName}!`);
+    const me = await userClient.me.get();
+    console.log(`Hello, ${me?.displayName}!`);
   } catch (err) {
-    console.log(`Error getting user: ${err}`);
+    console.log(`Error getting user: ${JSON.stringify(err, null, 2)}`);
   }
 
   let choice = 0;
@@ -46,16 +45,16 @@ async function main() {
         console.log('Goodbye...');
         break;
       case 0:
-        await runBatchSamples(userClient);
+        //await runBatchSamples(userClient);
         break;
       case 1:
         await runRequestSamples(userClient);
         break;
       case 2:
-        await runLargeFileUploadSamples(userClient, appConfig.largeFilePath);
+        //await runLargeFileUploadSamples(userClient, appConfig.largeFilePath);
         break;
       case 3:
-        await runPagingSamples(userClient);
+        //await runPagingSamples(userClient);
         break;
       default:
         console.log('Invalid choice! Please try again.');

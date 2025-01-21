@@ -1,39 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import 'isomorphic-fetch';
 import {
   DeviceCodeCredential,
   DeviceCodePromptCallback,
 } from '@azure/identity';
+import { AzureIdentityAuthenticationProvider } from '@microsoft/kiota-authentication-azure';
 import {
-  AuthenticationHandler,
-  Client,
-  HTTPMessageHandler,
-} from '@microsoft/microsoft-graph-client';
-// prettier-ignore
-import { TokenCredentialAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
-import { AppConfig } from './appConfig';
-import ClientLoggingMiddleware from './clientLoggingMiddleware';
+  createGraphServiceClient,
+  GraphRequestAdapter,
+  GraphServiceClient,
+} from '@microsoft/msgraph-sdk';
+import '@microsoft/msgraph-sdk-groups';
+import '@microsoft/msgraph-sdk-teams';
+import '@microsoft/msgraph-sdk-users';
+import { AppConfig } from './appConfig.js';
 
 export function getGraphClientForUser(
   appConfig: AppConfig,
   deviceCodePrompt: DeviceCodePromptCallback,
-): Client {
+): GraphServiceClient {
   const credential = new DeviceCodeCredential({
     clientId: appConfig.clientId,
     tenantId: appConfig.tenantId,
     userPromptCallback: deviceCodePrompt,
   });
 
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: appConfig.graphUserScopes,
-  });
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    appConfig.graphUserScopes,
+  );
 
-  return Client.initWithMiddleware({ authProvider: authProvider });
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  return createGraphServiceClient(requestAdapter);
 }
 
+/*
 export function getDebugGraphClientForUser(
   appConfig: AppConfig,
   deviceCodePrompt: DeviceCodePromptCallback,
@@ -59,3 +62,4 @@ export function getDebugGraphClientForUser(
     middleware: authHandler,
   });
 }
+*/

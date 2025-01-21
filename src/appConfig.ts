@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as config from 'config';
+import config from 'config';
 
 export interface AppConfig {
   clientId: string;

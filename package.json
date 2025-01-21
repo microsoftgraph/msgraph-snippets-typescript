@@ -1,6 +1,7 @@
 {
   "name": "msgraph-snippets-typescript",
   "version": "1.0.0",
+  "type": "module",
   "description": "![License.](https://img.shields.io/badge/license-MIT-green.svg)",
   "repository": {
     "url": "https://github.com/microsoftgraph/msgraph-snippets-typescript"
@@ -33,11 +34,15 @@
   },
   "dependencies": {
     "@azure/identity": "^4.6.0",
+    "@microsoft/kiota-authentication-azure": "^1.0.0-preview.80",
     "@microsoft/microsoft-graph-client": "^3.0.7",
+    "@microsoft/msgraph-sdk": "^1.0.0-preview.30",
+    "@microsoft/msgraph-sdk-groups": "^1.0.0-preview.30",
+    "@microsoft/msgraph-sdk-teams": "^1.0.0-preview.30",
+    "@microsoft/msgraph-sdk-users": "^1.0.0-preview.30",
     "config": "^3.3.12",
     "date-fns": "^4.1.0",
     "https-proxy-agent": "^7.0.6",
-    "isomorphic-fetch": "^3.0.0",
     "readline-sync": "^1.4.10"
   }
 }
