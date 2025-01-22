@@ -1,14 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+/*
 import {
-  Client,
   BatchRequestStep,
   BatchRequestContent,
   BatchResponseContent,
   PageCollection,
 } from '@microsoft/microsoft-graph-client';
-import { User, Event } from '@microsoft/microsoft-graph-types';
+*/
+import { GraphServiceClient } from '@microsoft/msgraph-sdk';
+/*
+import { User, Event } from '@microsoft/msgraph-sdk/models';
 import {
   startOfToday,
   endOfToday,
@@ -16,14 +19,16 @@ import {
   setMinutes,
   format,
 } from 'date-fns';
+*/
 
-export default async function runBatchSamples(graphClient: Client) {
+export default async function runBatchSamples(graphClient: GraphServiceClient) {
   await simpleBatch(graphClient);
   await dependentBatch(graphClient);
 }
 
-async function simpleBatch(graphClient: Client) {
+async function simpleBatch(_graphClient: GraphServiceClient) {
   // <SimpleBatchSnippet>
+  /* TBD
   // Create a batch request step to GET /me
   // Request is from fetch polyfill, i.e. node-fetch
   const userRequestStep: BatchRequestStep = {
@@ -92,11 +97,13 @@ async function simpleBatch(graphClient: Client) {
       `Get calendar view failed with status ${calendarResponse.status}`,
     );
   }
+  */
   // </SimpleBatchSnippet>
 }
 
-async function dependentBatch(graphClient: Client) {
+async function dependentBatch(_graphClient: GraphServiceClient) {
   // <DependentBatchSnippet>
+  /* TBD
   // 5:00 PM today
   // startOfToday, endOfToday, setHours, setMinutes, format from date-fns
   const eventStart = setHours(startOfToday(), 17);
@@ -184,5 +191,6 @@ async function dependentBatch(graphClient: Client) {
       `Get calendar view failed with status ${calendarResponse.status}`,
     );
   }
+  */
   // </DependentBatchSnippet>
 }
