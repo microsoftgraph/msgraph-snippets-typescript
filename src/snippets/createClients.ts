@@ -10,49 +10,14 @@ import {
   OnBehalfOfCredential,
   UsernamePasswordCredential,
 } from '@azure/identity';
-import { Client } from '@microsoft/microsoft-graph-client';
-// prettier-ignore
-import { TokenCredentialAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
-// prettier-ignore
-import { AuthCodeMSALBrowserAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
-import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
+import {
+  createGraphServiceClient,
+  GraphRequestAdapter,
+  GraphServiceClient,
+} from '@microsoft/msgraph-sdk';
+import { AzureIdentityAuthenticationProvider } from '@microsoft/kiota-authentication-azure';
 
-export async function createWithMsalBrowser(): Promise<Client> {
-  // <BrowserSnippet>
-  // @azure/msal-browser
-  const pca = new PublicClientApplication({
-    auth: {
-      clientId: 'YOUR_CLIENT_ID',
-      authority: `https://login.microsoft.online/${'YOUR_TENANT_ID'}`,
-      redirectUri: 'YOUR_REDIRECT_URI',
-    },
-  });
-
-  // Authenticate to get the user's account
-  const authResult = await pca.acquireTokenPopup({
-    scopes: ['User.Read'],
-  });
-
-  if (!authResult.account) {
-    throw new Error('Could not authenticate');
-  }
-
-  // @microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser
-  const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(pca, {
-    account: authResult.account,
-    interactionType: InteractionType.Popup,
-    scopes: ['User.Read'],
-  });
-
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
-  // </BrowserSnippet>
-
-  return graphClient;
-}
-
-export function createWithAuthorizationCode(): Client {
+export function createWithAuthorizationCode(): GraphServiceClient {
   // <AuthorizationCodeSnippet>
   // @azure/identity
   const credential = new AuthorizationCodeCredential(
@@ -63,18 +28,23 @@ export function createWithAuthorizationCode(): Client {
     'REDIRECT_URL',
   );
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['User.Read'],
-  });
+  const scopes = ['User.Read'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </AuthorizationCodeSnippet>
 
   return graphClient;
 }
 
-export function createWithClientSecret(): Client {
+export function createWithClientSecret(): GraphServiceClient {
   // <ClientSecretSnippet>
   // @azure/identity
   const credential = new ClientSecretCredential(
@@ -83,22 +53,27 @@ export function createWithClientSecret(): Client {
     'YOUR_CLIENT_SECRET',
   );
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    // The client credentials flow requires that you request the
-    // /.default scope, and pre-configure your permissions on the
-    // app registration in Azure. An administrator must grant consent
-    // to those permissions beforehand.
-    scopes: ['https://graph.microsoft.com/.default'],
-  });
+  // The client credentials flow requires that you request the
+  // /.default scope, and pre-configure your permissions on the
+  // app registration in Azure. An administrator must grant consent
+  // to those permissions beforehand.
+  const scopes = ['https://graph.microsoft.com/.default'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </ClientSecretSnippet>
 
   return graphClient;
 }
 
-export function createWithClientCertificate(): Client {
+export function createWithClientCertificate(): GraphServiceClient {
   // <ClientCertificateSnippet>
   // @azure/identity
   const credential = new ClientCertificateCredential(
@@ -107,22 +82,27 @@ export function createWithClientCertificate(): Client {
     'YOUR_CERTIFICATE_PATH',
   );
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    // The client credentials flow requires that you request the
-    // /.default scope, and pre-configure your permissions on the
-    // app registration in Azure. An administrator must grant consent
-    // to those permissions beforehand.
-    scopes: ['https://graph.microsoft.com/.default'],
-  });
+  // The client credentials flow requires that you request the
+  // /.default scope, and pre-configure your permissions on the
+  // app registration in Azure. An administrator must grant consent
+  // to those permissions beforehand.
+  const scopes = ['https://graph.microsoft.com/.default'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </ClientCertificateSnippet>
 
   return graphClient;
 }
 
-export function createWithOnBehalfOf(): Client {
+export function createWithOnBehalfOf(): GraphServiceClient {
   // <OnBehalfOfSnippet>
   // @azure/identity
   const credential = new OnBehalfOfCredential({
@@ -132,18 +112,23 @@ export function createWithOnBehalfOf(): Client {
     userAssertionToken: 'JWT_TOKEN_TO_EXCHANGE',
   });
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['https://graph.microsoft.com/.default'],
-  });
+  const scopes = ['https://graph.microsoft.com/.default'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </OnBehalfOfSnippet>
 
   return graphClient;
 }
 
-export function createWithDeviceCode(): Client {
+export function createWithDeviceCode(): GraphServiceClient {
   // <DeviceCodeSnippet>
   // @azure/identity
   const credential = new DeviceCodeCredential({
@@ -154,18 +139,23 @@ export function createWithDeviceCode(): Client {
     },
   });
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['User.Read'],
-  });
+  const scopes = ['User.Read'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </DeviceCodeSnippet>
 
   return graphClient;
 }
 
-export function createWithInteractive(): Client {
+export function createWithInteractive(): GraphServiceClient {
   // <InteractiveSnippet>
   // @azure/identity
   const credential = new InteractiveBrowserCredential({
@@ -174,18 +164,23 @@ export function createWithInteractive(): Client {
     redirectUri: 'http://localhost',
   });
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['User.Read'],
-  });
+  const scopes = ['User.Read'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </InteractiveSnippet>
 
   return graphClient;
 }
 
-export function createWithUserNamePassword(): Client {
+export function createWithUserNamePassword(): GraphServiceClient {
   // <UserNamePasswordSnippet>
   // @azure/identity
   const credential = new UsernamePasswordCredential(
@@ -195,12 +190,17 @@ export function createWithUserNamePassword(): Client {
     'YOUR_PASSWORD',
   );
 
-  // @microsoft/microsoft-graph-client/authProviders/azureTokenCredentials
-  const authProvider = new TokenCredentialAuthenticationProvider(credential, {
-    scopes: ['User.Read'],
-  });
+  const scopes = ['User.Read'];
 
-  const graphClient = Client.initWithMiddleware({ authProvider: authProvider });
+  // @microsoft/kiota-authentication-azure
+  const authProvider = new AzureIdentityAuthenticationProvider(
+    credential,
+    scopes,
+  );
+
+  const requestAdapter = new GraphRequestAdapter(authProvider);
+
+  const graphClient = createGraphServiceClient(requestAdapter);
   // </UserNamePasswordSnippet>
 
   return graphClient;
