@@ -5,7 +5,7 @@ import * as readline from 'readline-sync';
 import { DeviceCodeInfo } from '@azure/identity';
 import appConfig from './appConfig.js';
 import { getGraphClientForUser } from './graphHelper.js';
-//import runBatchSamples from './snippets/batchRequests.js';
+import runBatchSamples from './snippets/batchRequests.js';
 import runRequestSamples from './snippets/createRequests.js';
 //import runLargeFileUploadSamples from './snippets/largeFileUpload.js';
 //import runPagingSamples from './snippets/paging.js';
@@ -45,7 +45,7 @@ async function main() {
         console.log('Goodbye...');
         break;
       case 0:
-        //await runBatchSamples(userClient);
+        await runBatchSamples(userClient);
         break;
       case 1:
         await runRequestSamples(userClient);

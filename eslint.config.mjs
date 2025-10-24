@@ -20,11 +20,13 @@ export default [
 
     languageOptions: {
       globals: {
+        ...globals.browser,
         ...globals.node,
+        RequestInit: true,
       },
 
       parser: tsParser,
-      ecmaVersion: 'latest',
+      ecmaVersion: 6,
       sourceType: 'module',
     },
 
