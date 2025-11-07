@@ -8,20 +8,16 @@ import {
   GraphRequestAdapter,
   GraphServiceClient,
 } from '@microsoft/msgraph-sdk';
-
 import { getDefaultMiddlewares } from '@microsoft/msgraph-sdk-core';
 import {
   ChaosHandler,
   KiotaClientFactory,
 } from '@microsoft/kiota-http-fetchlibrary';
-//import { HttpsProxyAgent } from 'https-proxy-agent';
 import {
   fetch,
   ProxyAgent,
   RequestInit as UndiciRequestInit,
 } from 'undici-types';
-
-//interface RequestInit {}
 
 export function createWithChaosHandler(
   credential: TokenCredential,

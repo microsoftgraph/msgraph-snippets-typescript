@@ -7,7 +7,7 @@ import appConfig from './appConfig.js';
 import { getGraphClientForUser } from './graphHelper.js';
 import runBatchSamples from './snippets/batchRequests.js';
 import runRequestSamples from './snippets/createRequests.js';
-//import runLargeFileUploadSamples from './snippets/largeFileUpload.js';
+import runLargeFileUploadSamples from './snippets/largeFileUpload.js';
 //import runPagingSamples from './snippets/paging.js';
 
 async function main() {

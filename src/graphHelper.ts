@@ -11,6 +11,7 @@ import {
   GraphRequestAdapter,
   GraphServiceClient,
 } from '@microsoft/msgraph-sdk';
+import '@microsoft/msgraph-sdk-drives';
 import '@microsoft/msgraph-sdk-groups';
 import '@microsoft/msgraph-sdk-teams';
 import '@microsoft/msgraph-sdk-users';

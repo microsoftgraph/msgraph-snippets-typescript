@@ -2,20 +2,19 @@
 // Licensed under the MIT license.
 
 import {
-  Client,
-  FileUpload,
-  LargeFileUploadTask,
-  LargeFileUploadTaskOptions,
-  OneDriveLargeFileUploadOptions,
-  OneDriveLargeFileUploadTask,
-  UploadResult,
-} from '@microsoft/microsoft-graph-client';
-import { DriveItem, Message } from '@microsoft/microsoft-graph-types';
+  GraphRequestAdapter,
+  GraphServiceClient,
+} from '@microsoft/msgraph-sdk';
+import { LargeFileUploadTask } from '@microsoft/msgraph-sdk-core';
+import { createDriveItemFromDiscriminatorValue, DriveItem } from '@microsoft/msgraph-sdk/models';
+
+import { createReadStream, statSync } from 'fs';
+import { Readable } from 'stream';
 import { readFile } from 'fs/promises';
 import { basename } from 'path';
 
 export default async function runLargeFileUploadSamples(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   filePath: string,
 ): Promise<void> {
   const targetFolderPath = 'Documents';
@@ -25,45 +24,82 @@ export default async function runLargeFileUploadSamples(
 }
 
 async function uploadFileToOneDrive(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   filePath: string,
   targetFolderPath: string,
 ): Promise<void> {
   // <LargeFileUploadSnippet>
   // readFile from fs/promises
-  const file = await readFile(filePath);
+  const file = createReadStream(filePath);
+  const fileStream = Readable.toWeb(file) as ReadableStream<Uint8Array>;
   // basename from path
   const fileName = basename(filePath);
 
-  const options: OneDriveLargeFileUploadOptions = {
-    // Relative path from root folder
-    path: targetFolderPath,
-    fileName: fileName,
-    rangeSize: 1024 * 1024,
-    uploadEventHandlers: {
-      // Called as each "slice" of the file is uploaded
-      progress: (range, _) => {
-        console.log(`Uploaded bytes ${range?.minValue} to ${range?.maxValue}`);
+  const requestAdapter = new GraphRequestAdapter(null, null, null, null);
+
+  const myDrive = await graphClient.me.drive.get();
+  if (myDrive?.id) {
+    const uploadSession = graphClient.drives
+      .byDriveId(myDrive.id)
+      .items.byDriveItemId('root')
+      .withUrl(`${targetFolderPath}/${fileName}`)
+      .createUploadSession.post({
+        additionalData: {
+          '@microsoft.graph.conflictBehavior': 'replace',
+        },
+      });
+
+    const maxSliceSize = 320 * 1024;
+    const fileUploadTask = new LargeFileUploadTask<DriveItem>(
+      requestAdapter,
+      uploadSession,
+      fileStream,
+      maxSliceSize,
+      createDriveItemFromDiscriminatorValue,
+      null,
+    );
+
+    const fileStats = statSync(filePath);
+    const uploadResult = await fileUploadTask.upload({
+      report: (progress: number) => {
+        console.log(`Uploaded ${progress} of ${fileStats.size} bytes`);
       },
-    },
-  };
+    });
 
-  // Create FileUpload object
-  const fileUpload = new FileUpload(file, fileName, file.byteLength);
-  // Create a OneDrive upload task
-  const uploadTask = await OneDriveLargeFileUploadTask.createTaskWithFileObject(
-    graphClient,
-    fileUpload,
-    options,
-  );
+    console.log(`Upload complete, item ID: ${uploadResult.itemResponse?.id}`);
+  }
 
-  // Do the upload
-  const uploadResult: UploadResult = await uploadTask.upload();
+  // const uploadTask = new LargeFileUploadTask()
 
-  // The response body will be of the corresponding type of the
-  // item being uploaded. For OneDrive, this is a DriveItem
-  const driveItem = uploadResult.responseBody as DriveItem;
-  console.log(`Uploaded file with ID: ${driveItem.id}`);
+  // const options: OneDriveLargeFileUploadOptions = {
+  //   // Relative path from root folder
+  //   path: targetFolderPath,
+  //   fileName: fileName,
+  //   rangeSize: 1024 * 1024,
+  //   uploadEventHandlers: {
+  //     // Called as each "slice" of the file is uploaded
+  //     progress: (range, _) => {
+  //       console.log(`Uploaded bytes ${range?.minValue} to ${range?.maxValue}`);
+  //     },
+  //   },
+  // };
+
+  // // Create FileUpload object
+  // const fileUpload = new FileUpload(file, fileName, file.byteLength);
+  // // Create a OneDrive upload task
+  // const uploadTask = await OneDriveLargeFileUploadTask.createTaskWithFileObject(
+  //   graphClient,
+  //   fileUpload,
+  //   options,
+  // );
+
+  // // Do the upload
+  // const uploadResult: UploadResult = await uploadTask.upload();
+
+  // // The response body will be of the corresponding type of the
+  // // item being uploaded. For OneDrive, this is a DriveItem
+  // const driveItem = uploadResult.responseBody as DriveItem;
+  // console.log(`Uploaded file with ID: ${driveItem.id}`);
   // </LargeFileUploadSnippet>
 }
 
@@ -79,7 +115,7 @@ async function resumeUpload(
 }
 
 async function uploadAttachmentToMessage(
-  graphClient: Client,
+  graphClient: GraphServiceClient,
   filePath: string,
 ): Promise<void> {
   // <UploadAttachmentSnippet>
