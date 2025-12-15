@@ -19,7 +19,7 @@
     "@microsoft/microsoft-graph-types": "^2.43.1",
     "@types/config": "^3.3.5",
     "@types/isomorphic-fetch": "^0.0.39",
-    "@types/node": "^20.19.0",
+    "@types/node": "^25.0.2",
     "@types/readline-sync": "^1.4.8",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.49.0",
