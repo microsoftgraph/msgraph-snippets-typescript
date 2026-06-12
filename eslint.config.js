@@ -1,42 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import globals from 'globals';
-import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import eslintTypeScript from '@typescript-eslint/eslint-plugin';
-import eslintPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import header from 'eslint-plugin-header';
-header.rules.header.meta.schema = false;
+// cSpell:ignore ganchev
 
-export default [
+import { defineConfig } from 'eslint/config';
+
+import tseslint from 'typescript-eslint';
+import eslintPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import header from '@tony.ganchev/eslint-plugin-header';
+
+export default defineConfig(
   {
     ignores: ['**/out'],
   },
-  js.configs.recommended,
+  tseslint.configs.recommended,
   eslintPrettierRecommended,
   {
-    files: ['**/**.{ts,mjs}'],
+    files: ['**/**.{ts,js}'],
 
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        RequestInit: true,
-      },
-
-      parser: tsParser,
+      parser: tseslint.parser,
       ecmaVersion: 6,
       sourceType: 'module',
     },
 
     plugins: {
-      eslintTypeScript,
       header,
+      '@typescript-eslint': tseslint.plugin,
     },
 
     rules: {
-      'no-unused-vars': [
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           args: 'all',
@@ -54,15 +49,17 @@ export default [
           ' Copyright (c) Microsoft Corporation.',
           ' Licensed under the MIT license.',
         ],
+        2,
       ],
       'prettier/prettier': [
         'error',
         {
           singleQuote: true,
+          jsxSingleQuote: true,
           endOfLine: 'auto',
           printWidth: 80,
         },
       ],
     },
   },
-];
+);
