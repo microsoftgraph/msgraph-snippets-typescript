@@ -4,12 +4,12 @@
 import * as readline from 'readline-sync';
 import { DeviceCodeInfo } from '@azure/identity';
 import { User } from '@microsoft/microsoft-graph-types';
-import appConfig from './appConfig';
-import { getDebugGraphClientForUser } from './graphHelper';
-import runBatchSamples from './snippets/batchRequests';
-import runRequestSamples from './snippets/createRequests';
-import runLargeFileUploadSamples from './snippets/largeFileUpload';
-import runPagingSamples from './snippets/paging';
+import appConfig from './appConfig.js';
+import { getDebugGraphClientForUser } from './graphHelper.js';
+import runBatchSamples from './snippets/batchRequests.js';
+import runRequestSamples from './snippets/createRequests.js';
+import runLargeFileUploadSamples from './snippets/largeFileUpload.js';
+import runPagingSamples from './snippets/paging.js';
 
 async function main() {
   const userClient = getDebugGraphClientForUser(

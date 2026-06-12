@@ -13,10 +13,10 @@ import {
 import { Client } from '@microsoft/microsoft-graph-client';
 // prettier-ignore
 import { TokenCredentialAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
+  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
 // prettier-ignore
 import { AuthCodeMSALBrowserAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
+  from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser/index.js';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 
 export async function createWithMsalBrowser(): Promise<Client> {

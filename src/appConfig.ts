@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import * as config from 'config';
+import config from 'config';
 
 export interface AppConfig {
   clientId: string;
@@ -21,7 +21,7 @@ if (!appConfig.clientId || appConfig.clientId.length <= 0) {
   throw new Error('clientId missing or empty from config.');
 }
 
-if (!appConfig.tenantId || appConfig.clientId.length <= 0) {
+if (!appConfig.tenantId || appConfig.tenantId.length <= 0) {
   throw new Error('tenantId missing or empty from config.');
 }
 

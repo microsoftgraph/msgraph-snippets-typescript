@@ -13,9 +13,9 @@ import {
 } from '@microsoft/microsoft-graph-client';
 // prettier-ignore
 import { TokenCredentialAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
-import { AppConfig } from './appConfig';
-import ClientLoggingMiddleware from './clientLoggingMiddleware';
+  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
+import { AppConfig } from './appConfig.js';
+import ClientLoggingMiddleware from './clientLoggingMiddleware.js';
 
 export function getGraphClientForUser(
   appConfig: AppConfig,

@@ -10,7 +10,7 @@ import {
 } from '@microsoft/microsoft-graph-client';
 // prettier-ignore
 import { TokenCredentialAuthenticationProvider }
-  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
+  from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials/index.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export function createWithChaosHandler(
