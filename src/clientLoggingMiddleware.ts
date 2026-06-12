@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { Context, Middleware } from '@microsoft/microsoft-graph-client';
 
 export default class ClientLoggingMiddleware implements Middleware {
