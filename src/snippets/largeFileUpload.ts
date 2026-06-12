@@ -6,7 +6,7 @@ import {
   GraphServiceClient,
 } from '@microsoft/msgraph-sdk';
 import { LargeFileUploadTask } from '@microsoft/msgraph-sdk-core';
-import { createDriveItemFromDiscriminatorValue, DriveItem } from '@microsoft/msgraph-sdk/models';
+import { createDriveItemFromDiscriminatorValue, DriveItem } from '@microsoft/msgraph-sdk/models/index.js';
 
 import { createReadStream, statSync } from 'fs';
 import { Readable } from 'stream';

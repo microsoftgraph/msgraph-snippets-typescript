@@ -8,7 +8,7 @@ import {
   Message,
   Team,
   User,
-} from '@microsoft/msgraph-sdk/models';
+} from '@microsoft/msgraph-sdk/models/index.js';
 
 export default async function runRequestSamples(
   graphClient: GraphServiceClient,
