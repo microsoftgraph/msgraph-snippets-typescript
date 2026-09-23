@@ -31,7 +31,7 @@
     "typescript-eslint": "^8.70.0"
   },
   "dependencies": {
-    "@azure/identity": "^4.13.2",
+    "@azure/identity": "^4.13.3",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "config": "^5.0.1",
     "date-fns": "^4.4.0",
